@@ -130,18 +130,18 @@ module.exports = appInfo => {
     agent: false,
     clients: {
       xprofiler_console: {
-        host: '',
-        port: 3306,
-        user: '',
-        password: '',
-        database: 'xprofiler_console',
+        host: process.env['XPROFILER_CONSOLE_MYSQL_HOST'] || '',
+        port: process.env['XPROFILER_CONSOLE_MYSQL_PORT'] || 3306,
+        user: process.env['XPROFILER_CONSOLE_MYSQL_USER'] || '',
+        password: process.env['XPROFILER_CONSOLE_MYSQL_PASSWORD'] || '',
+        database: process.env['XPROFILER_CONSOLE_MYSQL_DATABASE'] || 'xprofiler_console',
       },
       xprofiler_logs: {
-        host: '',
-        port: 3306,
-        user: '',
-        password: '',
-        database: 'xprofiler_logs',
+        host: process.env['XPROFILER_LOGS_MYSQL_HOST'] || '',
+        port: process.env['XPROFILER_LOGS_MYSQL_PORT'] || 3306,
+        user: process.env['XPROFILER_LOGS_MYSQL_USER'] || '',
+        password: process.env['XPROFILER_LOGS_MYSQL_PASSWORD'] || '',
+        database: process.env['XPROFILER_LOGS_MYSQL_DATABASE'] || 'xprofiler_logs',
       },
     },
   };
@@ -149,19 +149,29 @@ module.exports = appInfo => {
   // redis
   userConfig.redis = {
     client: {
-      sentinels: null,
-      port: 6379,
-      host: '',
-      password: '',
-      db: 0,
+      sentinels: process.env['REDIS_SENTINELS'] || null,
+      port: process.env['REDIS_PORT'] || 6379,
+      host: process.env['REDIS_HOST'] || '',
+      password: process.env['REDIS_PASSWORD'] || '',
+      db: process.env['REDIS_DB'] || 0,
     },
   };
 
   // xtransit upload file
-  userConfig.xprofilerConsole = '';
+  userConfig.xprofilerConsole = process.env['XPROFILER_CONSOLE_URL'] || 'http://127.0.0.1:8443';
 
   // xtransit manager
-  userConfig.xtransitManager = '';
+  userConfig.xtransitManager = process.env["XTRANSIT_MANAGER_URL"] || 'http://127.0.0.1:8543';
+
+
+  console.log('--------config mysql--------', userConfig.mysql);
+
+  console.log('--------config redis--------', userConfig.redis);
+
+  console.log('--------config other--------', {
+    ...config,
+    ...userConfig
+  });
 
   return {
     ...config,
